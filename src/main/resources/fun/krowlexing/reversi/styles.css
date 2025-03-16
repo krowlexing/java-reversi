@@ -1,0 +1,6 @@
+.border-custom {
+    -fx-fill: whitesmoke;
+    -fx-stroke: red;
+    -fx-stroke-width: 1;
+    -fx-stroke-line-cap: butt;
+}
