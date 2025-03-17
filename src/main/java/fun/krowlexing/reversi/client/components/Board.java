@@ -22,6 +22,8 @@ public class Board extends VBox {
     private ColorService colors;
     private Size size;
 
+    private Action onMatchHandler;
+
     public Board(Size size, ColorService colorService) {
         colorService.init(size);
         this.colors = colorService;
@@ -76,19 +78,7 @@ public class Board extends VBox {
         if (!(selectedA.equals(selectedB))) {
 
             if (getCell(selectedA).getColor() == getCell(selectedB).getColor()) {
-                var cellA = selectedA;
-                var cellB = selectedB;
-                disableCell(selectedA);
-                disableCell(selectedB);
-                setTimeout(
-                    () -> {
-                        var rowA = (BoardRow) getChildren().get(cellA.y);
-                        var rowB = (BoardRow) getChildren().get(cellB.y);
-                        rowA.getChildren().set(cellA.x, new EmptyCell());
-                        rowB.getChildren().set(cellB.x, new EmptyCell());
-                    },
-                    1000
-                );
+                match();
             } else {
                 disableCell(selectedA);
                 disableCell(selectedB);
@@ -120,6 +110,24 @@ public class Board extends VBox {
         ).toggleFalse();
         selectedA = null;
 
+    }
+
+    private void match() {
+        var cellA = selectedA;
+        var cellB = selectedB;
+        disableCell(selectedA);
+        disableCell(selectedB);
+        setTimeout(
+            () -> {
+                var rowA = (BoardRow) getChildren().get(cellA.y);
+                var rowB = (BoardRow) getChildren().get(cellB.y);
+                rowA.getChildren().set(cellA.x, new EmptyCell());
+                rowB.getChildren().set(cellB.x, new EmptyCell());
+            },
+            1000
+        );
+
+        if (onMatchHandler != null) onMatchHandler.execute();
     }
 
     public void disableCell(int x, int y) {
@@ -187,5 +195,10 @@ public class Board extends VBox {
         ));
         timeline.setCycleCount(1);
         timeline.play();
+    }
+
+    public Board onMatch(Action action) {
+        onMatchHandler = action;
+        return this;
     }
 }

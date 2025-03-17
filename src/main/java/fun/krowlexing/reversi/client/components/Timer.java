@@ -9,9 +9,14 @@ import javafx.util.Duration;
 public class Timer extends Label {
     private Timeline timeline;
     private int seconds;
+    private Action timeoutHandler;
 
     public Timer() {
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            if (seconds <= 0) {
+                timeline.stop();
+                if (timeoutHandler != null) timeoutHandler.execute();
+            }
             this.seconds -= 1;
             this.setText(this.seconds + "");
         }));
@@ -29,6 +34,14 @@ public class Timer extends Label {
     }
 
     public void pause() {
+        timeline.stop();
+    }
+
+    public void onTimeOut(Action onTimeOut) {
+        timeoutHandler = onTimeOut;
+    }
+
+    public void stop() {
         timeline.stop();
     }
 }

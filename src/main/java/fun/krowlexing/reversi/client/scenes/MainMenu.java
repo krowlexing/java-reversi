@@ -3,6 +3,8 @@ package fun.krowlexing.reversi.client.scenes;
 
 import fun.krowlexing.reversi.client.Router;
 import fun.krowlexing.reversi.client.network.Network;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,16 +20,18 @@ public class MainMenu extends Scene {
     public MainMenu(VBox control){
         super(control);
 
-        var button = new Button("Get rooms");
-        button.setOnMouseClicked(this::onRoomsClick);
+        control.setAlignment(Pos.TOP_CENTER);
+        control.setPadding(new Insets(20));
+        control.setSpacing(10);
+
 
         var prepareGameButton = new Button("Prepare game");
+        var stats = new Button("Stats");
         prepareGameButton.setOnMouseClicked(this::onPrepareGame);
 
         control.getChildren().addAll(
-            new Label("Hello world!"),
             prepareGameButton,
-            button
+            stats
         );
     }
 
