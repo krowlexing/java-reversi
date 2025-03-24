@@ -15,6 +15,7 @@ public class SocketWriter {
         this.write(message.type());
         message.write(this);
     }
+
     public void write(MessageType messageType) throws IOException {
         this.writeByte(messageType.ord());
     }
@@ -22,11 +23,21 @@ public class SocketWriter {
     public void writeByte(int data) throws IOException {
         output.writeByte((byte) data);
     }
+
     public void writeByte(byte data) throws IOException {
         output.writeByte(data);
     }
 
     public void writeInt(int data) throws IOException {
         output.writeInt(data);
+    }
+
+    // Add writeString method
+    public void writeString(String data) throws IOException {
+        // Write the length of the string
+        writeInt(data.length());
+
+        // Write the string's bytes
+        output.writeBytes(data);
     }
 }

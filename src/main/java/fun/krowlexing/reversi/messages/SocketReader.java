@@ -1,7 +1,5 @@
 package fun.krowlexing.reversi.messages;
 
-import com.almasb.fxgl.input.Input;
-
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,7 +7,7 @@ import java.io.InputStream;
 public class SocketReader {
     DataInputStream stream;
 
-    SocketReader(InputStream stream) {
+    public SocketReader(InputStream stream) {
         this.stream = new DataInputStream(stream);
     }
 
@@ -19,5 +17,18 @@ public class SocketReader {
 
     public int readInt() throws IOException {
         return this.stream.readInt();
+    }
+
+    // Add readString method
+    public String readString() throws IOException {
+        // Read the length of the string
+        int length = this.stream.readInt();
+        byte[] bytes = new byte[length];
+
+        // Read the string bytes
+        this.stream.readFully(bytes);
+
+        // Convert the bytes to a string
+        return new String(bytes);
     }
 }

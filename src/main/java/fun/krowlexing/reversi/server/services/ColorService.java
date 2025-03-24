@@ -1,4 +1,4 @@
-package fun.krowlexing.reversi.client.services;
+package fun.krowlexing.reversi.server.services;
 
 import fun.krowlexing.reversi.client.components.Skin;
 import fun.krowlexing.reversi.client.data.Point;

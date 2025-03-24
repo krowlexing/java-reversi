@@ -1,20 +1,18 @@
 package fun.krowlexing.reversi.client.network;
 
-import fun.krowlexing.reversi.client.events.Listener;
-import fun.krowlexing.reversi.messages.Rooms;
-import fun.krowlexing.reversi.messages.ServerMessageType;
+import fun.krowlexing.reversi.messages.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 
-import static fun.krowlexing.reversi.logger.Logger.print;
-
 public class NetworkHandler extends Thread {
 
     private Socket socket;
+    private Promise<Rooms> roomsPromise;
+    private Promise<RegisterResponse> registerPromise;
+    private Promise<LoginResponse> loginPromise;
 
-    public Listener<Rooms> rooms = new Listener<>();
     public NetworkHandler(Socket socket) {
         this.socket = socket;
     }
@@ -24,21 +22,33 @@ public class NetworkHandler extends Thread {
         super.run();
 
         try (var input = socket.getInputStream()) {
+            var reader = new SocketReader(input);
             while (true) {
                 var type = ServerMessageType.read(input);
 
-                if (ServerMessageType.Rooms == type) handleRooms(input);
+               if (ServerMessageType.RegisterResponse == type) {
+                    var response = RegisterResponse.read(reader);
+                    if (registerPromise != null)
+                        this.registerPromise.resolve(response);
+                } else if (ServerMessageType.LoginResponse == type) {
+                    var response = LoginResponse.read(reader);
+                    if (loginPromise != null)
+                        this.loginPromise.resolve(response);
+                }
             }
         } catch (IOException e) {
-            print("IO Exception while handling messages from server");
             e.printStackTrace();
         }
-
     }
 
-    void handleRooms(InputStream input) throws IOException {
-        var rooms = Rooms.read(input);
-        this.rooms.emit(rooms);
+
+    public Promise<RegisterResponse> onRegister() {
+        registerPromise = new Promise<>();
+        return registerPromise;
+    }
+
+    public Promise<LoginResponse> onLogin() {
+        loginPromise = new Promise<>();
+        return loginPromise;
     }
 }
-

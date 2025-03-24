@@ -47,18 +47,7 @@ public class MainMenu extends Scene {
         return new MainMenu(box);
     }
 
-    void onRoomsClick(MouseEvent mouseEvent) {
-        try {
-            startConnection();
-            network.requestRooms(rooms -> {
-                print("accepted rooms");
-                print(rooms.toString());
-            });
-        } catch (IOException e) {
-            print("failed to fetch rooms");
-            e.printStackTrace();
-        }
-    }
+
 
     void onPrepareGame(MouseEvent mouseEvent) {
         Router.navigate(NewGame::new);

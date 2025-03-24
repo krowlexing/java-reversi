@@ -33,6 +33,17 @@ public class PaneStyler {
             parent.setMaxHeight(style.maxHeight);
         }
 
+        var padding = style.padding();
+        if (padding != null) {
+            parent.setPadding(padding);
+        }
+
+        if (parent instanceof VBox) {
+            var box = (VBox) parent;
+
+            box.setSpacing(style.gap);
+        }
+
         var border = style.border();
         if (border != null) {
             parent.setBorder(border);

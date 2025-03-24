@@ -6,7 +6,7 @@ import fun.krowlexing.reversi.client.components.Skin;
 import fun.krowlexing.reversi.client.components.Timer;
 import fun.krowlexing.reversi.client.data.GameSettings;
 import fun.krowlexing.reversi.client.data.Size;
-import fun.krowlexing.reversi.client.services.ColorService;
+import fun.krowlexing.reversi.server.services.ColorService;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 

@@ -1,7 +1,9 @@
 package fun.krowlexing.reversi.client.styles;
 
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Control;
+import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -15,6 +17,8 @@ public class Style implements Cloneable{
     public float maxWidth;
     public float maxHeight;
 
+    public Paint color = Paint.valueOf("#000000");
+
 
     public double borderTop = 0.0;
     public double borderBottom = 0.0;
@@ -22,6 +26,14 @@ public class Style implements Cloneable{
     public double borderRight = 0.0;
 
     public Paint borderColor = Paint.valueOf("#ffffff");
+
+    public double gap;
+
+
+    public double paddingTop;
+    public double paddingBottom;
+    public double paddingLeft;
+    public double paddingRight;
 
     public static StyleBuilder create() {
         return new StyleBuilder();
@@ -49,6 +61,14 @@ public class Style implements Cloneable{
         return new Border(stroke);
     }
 
+    public Insets padding() {
+        return new Insets(paddingTop, paddingRight, paddingBottom, paddingLeft);
+    }
+
+    public Label apply(Label label) {
+        return LabelStyler.apply(label, this);
+    }
+
     public Control apply(Control control) {
         var background = this.background();
         if (background != null) {
@@ -64,6 +84,10 @@ public class Style implements Cloneable{
         }
 
         return control;
+    }
+
+    public static StyleBuilder style() {
+        return new StyleBuilder();
     }
 
     public Pane apply(Pane parent) {

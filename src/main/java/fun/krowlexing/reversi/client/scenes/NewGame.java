@@ -29,7 +29,5 @@ public class NewGame extends Scene {
             ).gap(20).box(),
             button
         );
-
-
     }
 }

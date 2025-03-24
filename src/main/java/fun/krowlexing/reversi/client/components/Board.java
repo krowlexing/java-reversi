@@ -3,7 +3,7 @@ package fun.krowlexing.reversi.client.components;
 
 import fun.krowlexing.reversi.client.data.Point;
 import fun.krowlexing.reversi.client.data.Size;
-import fun.krowlexing.reversi.client.services.ColorService;
+import fun.krowlexing.reversi.server.services.ColorService;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.layout.VBox;

@@ -6,9 +6,11 @@ module fun.krowlexing.reversi {
     requires com.dlsc.formsfx;
     requires org.kordamp.ikonli.javafx;
     requires com.almasb.fxgl.all;
+    requires java.sql;
 
     opens fun.krowlexing.reversi to javafx.fxml;
     exports fun.krowlexing.reversi;
     exports fun.krowlexing.reversi.client.components;
+    exports fun.krowlexing.reversi.client.styles;
     opens fun.krowlexing.reversi.client.components to javafx.fxml;
 }

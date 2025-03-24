@@ -7,34 +7,30 @@ import static fun.krowlexing.reversi.logger.Logger.print;
 
 public enum ClientMessageType {
     RoomsRequest,
-    Authorize,
     CreateRoom,
-    JoinRoom;
+    JoinRoom,
+    LoginRequest,
+    RegisterRequest,
+    PrepareGame;
 
     ClientMessageType() {
-
     }
-
 
     int ord() {
         return this.ordinal() + 100;
     }
 
     public static ClientMessageType read(InputStream i) throws IOException {
-        var type = i.read();
-        if (type == -1) {
-            type = i.read();
+        var type = i.read(); // Read the byte from the InputStream
+        print("received message: " + type);
+        // Check if the type is within valid range
+        if (type >= 100) {
+            type -= 100;
         }
-        if (Authorize.ord() == type) return Authorize;
-        if (RoomsRequest.ord() == type) return RoomsRequest;
-        if (CreateRoom.ord() == type) return CreateRoom;
-        if (JoinRoom.ord() == type) return JoinRoom;
-        if (type == -1) {
-            print("reached end of stream");
-            throw new RuntimeException("reached end of stream");
+        if (type < 0 || type >= ClientMessageType.values().length) {
+            throw new IOException("Unknown message type: " + type);
         }
-        //        if (type == -1) throw new IOException("Reached end of stream");
 
-        throw new IOException("Unknown message type: " + type);
+        return ClientMessageType.values()[type];
     }
 }

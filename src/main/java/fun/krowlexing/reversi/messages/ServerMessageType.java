@@ -5,14 +5,18 @@ import java.io.InputStream;
 
 public enum ServerMessageType {
     Rooms,
-    PrepareGameResponse;
+    PrepareGameResponse,
+    RegisterResponse,
+    LoginResponse;
 
     public static ServerMessageType read(InputStream i) throws IOException {
-        var type = i.read();
+        var type = i.read(); // Read the byte from the InputStream
 
-        if (Rooms.ordinal() == type) return Rooms;
-        if (PrepareGameResponse.ordinal() == type) return PrepareGameResponse;
+        // Check if the type is within valid range
+        if (type < 0 || type >= ServerMessageType.values().length) {
+            throw new IOException("Unknown message type: " + type);
+        }
 
-        throw new IOException("Unknown message type: " + type);
+        return ServerMessageType.values()[type];
     }
 }

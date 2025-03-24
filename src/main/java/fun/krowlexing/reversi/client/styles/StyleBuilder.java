@@ -66,6 +66,24 @@ public class StyleBuilder {
         return this;
     }
 
+    public StyleBuilder color(String color) {
+        style.color = Paint.valueOf(color);
+        return this;
+    }
+
+    public StyleBuilder padding(double padding) {
+        style.paddingTop = padding;
+        style.paddingBottom = padding;
+        style.paddingLeft = padding;
+        style.paddingRight = padding;
+        return this;
+    }
+
+    public StyleBuilder gap(double gap) {
+        style.gap = gap;
+        return this;
+    }
+
     public Style build() {
         return style;
     }
