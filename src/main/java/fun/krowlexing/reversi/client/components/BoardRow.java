@@ -5,28 +5,28 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 public class BoardRow extends HBox {
-    private FetchColor fetchColor;
 
-    private BoardRow(FetchColor fetchColor) {
-        this.fetchColor = fetchColor;
+
+    private BoardRow() {
+
     }
 
 
-    public static BoardRow create(int y, int width, FetchColor fetchColor) {
-        var row = new BoardRow(fetchColor);
+    public static BoardRow create(int y, int width) {
+        var row = new BoardRow();
         var children = row.getChildren();
         for (int x = 0; x < width; x++) {
-            var cell = new Cell(x, y, fetchColor);
+            var cell = new Cell(x, y);
             children.add(cell);
         }
         return row;
     }
 
-    public static BoardRow withHole(int y, int width, FetchColor fetchColor) {
-        var row = new BoardRow(fetchColor);
+    public static BoardRow withHole(int y, int width) {
+        var row = new BoardRow();
         var children = row.getChildren();
         for (int x = 0; x < width; x++) {
-            var control = x == (width / 2) ? new EmptyCell() : new Cell(x, y, fetchColor);
+            var control = x == (width / 2) ? new EmptyCell() : new Cell(x, y);
             children.add(control);
         }
         return row;

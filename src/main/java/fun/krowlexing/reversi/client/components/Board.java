@@ -3,13 +3,16 @@ package fun.krowlexing.reversi.client.components;
 
 import fun.krowlexing.reversi.client.data.Point;
 import fun.krowlexing.reversi.client.data.Size;
+import fun.krowlexing.reversi.client.network.Network;
 import fun.krowlexing.reversi.server.services.ColorService;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,14 +39,12 @@ public class Board extends VBox {
             if (hasHole && y == (size.height / 2)) {
                 row = BoardRow.withHole(
                     y,
-                    size.width,
-                    this::fetchColor
+                    size.width
                 );
             } else {
                 row = BoardRow.create(
                     y,
-                    size.width,
-                    this::fetchColor
+                    size.width
                 );
             }
 
@@ -52,47 +53,62 @@ public class Board extends VBox {
         }
     }
 
-
-    public Paint fetchColor(int x, int y) {
-        return colors.color(new Point(
-            x,
-            y
-        ));
-    }
-
-    public void onCellClick(int x, int y) {
+    public void onCellClick(int x, int y) throws IOException {
         if (disabledPoints.contains(new Point(x, y))) {
             return;
         }
 
-        if (selectedA == null) {
+        if (!isFirstCellSelected()) {
             selectedA = new Point(x, y);
             selectCell(selectedA);
             return;
         }
 
-        selectCell(selectedA);
-        selectedB = new Point(x, y);
-        toggleCell(selectedA);
-        toggleCell(selectedB);
-        if (!(selectedA.equals(selectedB))) {
+        if (!isSecondCellSelected()) {
+            selectedB = new Point(x, y);
+            selectCell(selectedA);
 
-            if (getCell(selectedA).getColor() == getCell(selectedB).getColor()) {
-                match();
-            } else {
-                disableCell(selectedA);
-                disableCell(selectedB);
+            if (!(selectedA.equals(selectedB))) {
                 var cellA = selectedA;
                 var cellB = selectedB;
+                checkNetwork(cellA, cellB);
+                selectedA = null;
+                selectedB = null;
+//                getCell(
+//                    cellA
+//                ).toggleFalse();
+//                selectedA = null;
+            } else {
+                selectedB = null;
+            }
+        }
+
+
+    }
+
+    private void checkNetwork(Point cellA, Point cellB) throws IOException {
+        disableCell(cellA);
+        disableCell(cellB);
+        Network.get().pairMatched(
+            cellA,
+            cellB
+        ).then((r) -> Platform.runLater(() -> {
+            toggleCell(
+                cellA, r.colorA
+            );
+            toggleCell(
+                cellB, r.colorB
+            );
+            if (r.success) {
+                match(cellA, cellB);
+            } else {
                 setTimeout(
                     () -> {
                         toggleCell(
-                            cellA.x,
-                            cellA.y
+                            cellA, r.colorA
                         );
                         toggleCell(
-                            cellB.x,
-                            cellB.y
+                            cellB, r.colorB
                         );
                         enableCell(cellA);
                         enableCell(cellB);
@@ -101,22 +117,20 @@ public class Board extends VBox {
                 );
 
             }
-            selectedA = null;
-            selectedB = null;
-            return;
-        }
-        getCell(
-            selectedA
-        ).toggleFalse();
-        selectedA = null;
-
+        }));
     }
 
-    private void match() {
-        var cellA = selectedA;
-        var cellB = selectedB;
-        disableCell(selectedA);
-        disableCell(selectedB);
+    private boolean isFirstCellSelected() {
+        return selectedA != null;
+    }
+
+    private boolean isSecondCellSelected() {
+        return selectedB != null;
+    }
+
+    private void match(Point cellA, Point cellB) {
+        disableCell(cellA);
+        disableCell(cellB);
         setTimeout(
             () -> {
                 var rowA = (BoardRow) getChildren().get(cellA.y);
@@ -142,16 +156,17 @@ public class Board extends VBox {
         var contained = this.disabledPoints.remove(point);
     }
 
-    public void toggleCell(int x, int y) {
+    public void toggleCell(int x, int y, Paint color) {
         var cell = getCell(
             x,
             y
         );
+        cell.setColor(color);
         cell.toggle();
     }
 
-    public void toggleCell(Point point) {
-        toggleCell(point.x, point.y);
+    public void toggleCell(Point point, int colorId) {
+        toggleCell(point.x, point.y, skin.map(colorId));
     }
 
     public void selectCell(Point point) {

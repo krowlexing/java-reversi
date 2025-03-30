@@ -39,7 +39,7 @@ public class MainMenu extends Scene {
     private void startConnection() throws IOException{
         if (network != null && !network.closed()) return;
 
-        network = new Network();
+        network = Network.get();
     }
 
     public static MainMenu create() {

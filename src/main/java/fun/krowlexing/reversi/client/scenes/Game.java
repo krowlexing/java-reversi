@@ -61,8 +61,8 @@ public class Game extends Scene {
 
     public void onPairMatched() {
         matchedPairs += 1;
-        timer.stop();
         if (matchedPairs == width * height / 2) {
+            timer.stop();
             Router.navigate(GameEnd::success);
         }
     }

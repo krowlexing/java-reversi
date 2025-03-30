@@ -6,6 +6,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
+import java.io.IOException;
+
 
 public class Cell extends StackPane {
     private final Style base = Style.create()
@@ -21,14 +23,13 @@ public class Cell extends StackPane {
 
     int color;
 
-    FetchColor getColor;
+    Paint paint;
 
     private int x;
     private int y;
 
 
-    public Cell(int x, int y, FetchColor getColor) {
-        this.getColor = getColor;
+    public Cell(int x, int y) {
         var children = this.getChildren();
         Style.create()
             .maxWidth(40)
@@ -47,10 +48,7 @@ public class Cell extends StackPane {
         if (added) {
             this.getChildren().remove(circle);
         } else {
-            this.circle.setFill(getColor.fetch(
-                x,
-                y
-            ));
+            this.circle.setFill(paint);
             this.getChildren().add(circle);
         }
         added = !added;
@@ -78,9 +76,19 @@ public class Cell extends StackPane {
     }
 
     public void setOnCellClicked(OnCellClick handler) {
-        this.setOnMouseClicked(e -> handler.onClick(
-            x,
-            y
-        ));
+        this.setOnMouseClicked(e -> {
+            try {
+                handler.onClick(
+                    x,
+                    y
+                );
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+    }
+
+    public void setColor(Paint color) {
+        this.paint = color;
     }
 }

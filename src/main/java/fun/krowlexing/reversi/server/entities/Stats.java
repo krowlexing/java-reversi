@@ -5,16 +5,18 @@ import java.sql.Timestamp;
 public class Stats {
     private int id;
     private int playerId;
-    private int fieldSize;
+    private int fieldWidth;
+    private int fieldHeight;
     private int timeUsed;
     private int maxTime;
     private int pairsChecked;
     private Timestamp playedAt;
 
-    public Stats(int id, int playerId, int fieldSize, int timeUsed, int maxTime, int pairsChecked, Timestamp playedAt) {
+    public Stats(int id, int playerId, int width, int height, int timeUsed, int maxTime, int pairsChecked, Timestamp playedAt) {
         this.id = id;
         this.playerId = playerId;
-        this.fieldSize = fieldSize;
+        this.fieldWidth = width;
+        this.fieldHeight = height;
         this.timeUsed = timeUsed;
         this.maxTime = maxTime;
         this.pairsChecked = pairsChecked;
@@ -37,13 +39,6 @@ public class Stats {
         this.playerId = playerId;
     }
 
-    public int getFieldSize() {
-        return fieldSize;
-    }
-
-    public void setFieldSize(int fieldSize) {
-        this.fieldSize = fieldSize;
-    }
 
     public int getTimeUsed() {
         return timeUsed;

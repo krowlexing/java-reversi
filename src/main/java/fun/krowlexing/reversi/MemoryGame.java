@@ -19,7 +19,7 @@ public class MemoryGame extends Application {
         stage.setTitle("Memory");
         Router.init(stage);
 
-        network = new Network();
+        network = Network.get();
 
         Router.navigate(parent -> Registration.create(parent, network));
         stage.show();

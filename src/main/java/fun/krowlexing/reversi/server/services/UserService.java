@@ -26,9 +26,9 @@ public class UserService {
         }
     }
 
-    public boolean exists(String username, String password) throws PersistenceException{
+    public int getId(String username, String password) throws PersistenceException{
         try {
-            return repo.exists(username, password);
+            return repo.getId(username, password);
         } catch (SQLException e) {
             throw new PersistenceException("Failed to check user: " + e.getMessage());
         }

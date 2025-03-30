@@ -3,7 +3,6 @@ package fun.krowlexing.reversi.server.services;
 import fun.krowlexing.reversi.client.components.Skin;
 import fun.krowlexing.reversi.client.data.Point;
 import fun.krowlexing.reversi.client.data.Size;
-import javafx.scene.paint.Paint;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,16 +20,21 @@ public class ColorService {
 
     public void init(Size boardSize) {
         this.boardSize = boardSize;
-        int size;
-        if (boardSize.width * boardSize.height % 2 == 1) {
-            size = boardSize.width * boardSize.height - 1;
-        } else {
-            size = boardSize.width * boardSize.height;
-        }
+        int size = getCellCount(boardSize);
 
         var list = generateCells(size);
         colors = list.stream().mapToInt(Integer::intValue).toArray();
     }
+
+    public int getCellCount(Size boardSize) {
+        if (boardSize.width * boardSize.height % 2 == 1) {
+            return boardSize.width * boardSize.height - 1;
+        } else {
+            return boardSize.width * boardSize.height;
+        }
+    }
+
+
 
     public List<Integer> generateCells(int total) {
         var list = new ArrayList<Integer>(total);
@@ -49,13 +53,18 @@ public class ColorService {
         return list;
     }
 
-    public Paint color(Point point) {
+    public boolean isMatch(Point a, Point b) {
+        return colors[cellIndex(a.x, a.y)] == colors[cellIndex(b.x, b.y)];
+    }
+
+
+    public int color(Point point) {
         int colorId = colors[cellIndex(
             point.x,
             point.y
         )];
 
-        return skin.map(colorId);
+        return colorId;
     }
 
     private boolean hasHole(Size size) {

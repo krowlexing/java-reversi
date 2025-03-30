@@ -7,7 +7,7 @@ public enum ServerMessageType {
     Rooms,
     PrepareGameResponse,
     RegisterResponse,
-    LoginResponse;
+    LoginResponse, PairRevealResponse, GameCompleted;
 
     public static ServerMessageType read(InputStream i) throws IOException {
         var type = i.read(); // Read the byte from the InputStream

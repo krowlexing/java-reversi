@@ -11,7 +11,7 @@ public enum ClientMessageType {
     JoinRoom,
     LoginRequest,
     RegisterRequest,
-    PrepareGame;
+    PrepareGame, PairRevealRequest;
 
     ClientMessageType() {
     }

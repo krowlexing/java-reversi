@@ -66,6 +66,11 @@ public class Field extends VBox {
         this.error.setText(errorText);
     }
 
+    public Field promptText(String promptText) {
+        this.textField.setPromptText(promptText);
+        return this;
+    }
+
     public static Builder field() {
         return new Builder();
     }

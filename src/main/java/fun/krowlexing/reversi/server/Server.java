@@ -1,6 +1,8 @@
 package fun.krowlexing.reversi.server;
 
+import fun.krowlexing.reversi.client.components.Skin;
 import fun.krowlexing.reversi.server.repos.Repository;
+import fun.krowlexing.reversi.server.services.ColorService;
 import fun.krowlexing.reversi.server.services.UserService;
 
 import java.io.IOException;
@@ -17,6 +19,7 @@ public class Server {
             var repo = new Repository(connection);
             repo.init();
             var userService = new UserService(repo.users);
+            var colorService = new ColorService(new Skin());
 
             try (ServerSocket socket = new ServerSocket(11037)) {
                 print("bound to socket");
@@ -24,7 +27,9 @@ public class Server {
                     var client = socket.accept();
                     var thread = new ClientThread(
                         client,
-                        userService
+                        userService,
+                        colorService,
+                        repo.stats
                     );
                     thread.start();
                 }

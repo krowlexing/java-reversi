@@ -1,5 +1,6 @@
 package fun.krowlexing.reversi.client.network;
 
+import fun.krowlexing.reversi.client.data.Point;
 import fun.krowlexing.reversi.messages.*;
 
 import java.io.IOException;
@@ -13,11 +14,24 @@ public class Network {
     private NetworkHandler input;
     private SocketWriter writer;
 
-    public Network() throws IOException {
+    private static Network instance;
+
+    private Network() throws IOException {
+        print("init new network");
         this.socket = new Socket("127.0.0.1", 11037);
         this.writer = new SocketWriter(socket.getOutputStream());
         input = new NetworkHandler(socket);
         input.start();
+    }
+
+    public static Network get() {
+        try {
+            if (instance == null) instance = new Network();
+            return instance;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("NEtowrwk erororr");
+        }
     }
 
     public boolean closed() {
@@ -47,5 +61,23 @@ public class Network {
         print("joined");
 
         print("socket closed");
+    }
+
+    public Promise<PrepareGameResponse> prepareGame(int width, int height, int time) throws IOException {
+        var req = new PrepareGameRequest(width, height, time);
+        var promise = input.onPrepareGame();
+        writer.write(req);
+        return promise;
+    }
+
+    public Promise<PairRevealResponse> pairMatched(Point selectedA, Point selectedB) throws IOException {
+        var req = new PairRevealRequest(selectedA, selectedB);
+        var promise = input.onPairReveal();
+        writer.write(req);
+        return promise;
+    }
+
+    public Promise<GameCompletedMessage> onGameCompleted() {
+        return input.onGameCompleted();
     }
 }

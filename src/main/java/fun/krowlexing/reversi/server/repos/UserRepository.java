@@ -35,14 +35,16 @@ public class UserRepository implements AutoCloseable {
         }
     }
 
-    public boolean exists(String username, String password) throws SQLException {
+    public int getId(String username, String password) throws SQLException {
         var query = "SELECT * FROM users WHERE username = ? AND password = ?";
 
         try (var stmt = connection.prepareStatement(query)) {
             stmt.setString(1, username);
             stmt.setString(2, password);
             try(var result = stmt.executeQuery()) {
-                return !result.next();
+                var hasRow = result.next();
+                if (!hasRow) return -1;
+                return result.getInt("id");
             }
         }
     }

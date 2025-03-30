@@ -15,7 +15,7 @@ public class PrepareGameRequest implements SocketMessage {
 
     @Override
     public MessageType type() {
-        return null;
+        return MessageType.client(ClientMessageType.PrepareGame);
     }
 
     public static PrepareGameRequest read(SocketReader input) throws IOException {
