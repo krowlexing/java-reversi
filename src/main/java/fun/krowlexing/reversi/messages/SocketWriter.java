@@ -32,6 +32,10 @@ public class SocketWriter {
         output.writeInt(data);
     }
 
+    public void write(int data) throws IOException {
+        output.writeInt(data);
+    }
+
     // Add writeString method
     public void writeString(String data) throws IOException {
         // Write the length of the string

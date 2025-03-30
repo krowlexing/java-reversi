@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
+import static fun.krowlexing.reversi.client.components.Utils.button;
 import static fun.krowlexing.reversi.logger.Logger.print;
 
 public class MainMenu extends Scene {
@@ -26,7 +27,8 @@ public class MainMenu extends Scene {
 
 
         var prepareGameButton = new Button("Prepare game");
-        var stats = new Button("Stats");
+        var stats = button("Stats")
+            .onClick(e -> Router.navigate(Stats::new)).done();
         prepareGameButton.setOnMouseClicked(this::onPrepareGame);
 
         control.getChildren().addAll(

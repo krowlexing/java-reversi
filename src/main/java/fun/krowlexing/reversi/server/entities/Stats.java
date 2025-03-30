@@ -71,4 +71,20 @@ public class Stats {
     public void setPlayedAt(Timestamp playedAt) {
         this.playedAt = playedAt;
     }
+
+    public int getFieldWidth() {
+        return fieldWidth;
+    }
+
+    public void setFieldWidth(int fieldWidth) {
+        this.fieldWidth = fieldWidth;
+    }
+
+    public int getFieldHeight() {
+        return fieldHeight;
+    }
+
+    public void setFieldHeight(int fieldHeight) {
+        this.fieldHeight = fieldHeight;
+    }
 }

@@ -12,5 +12,6 @@ module fun.krowlexing.reversi {
     exports fun.krowlexing.reversi;
     exports fun.krowlexing.reversi.client.components;
     exports fun.krowlexing.reversi.client.styles;
+    exports fun.krowlexing.reversi.messages;
     opens fun.krowlexing.reversi.client.components to javafx.fxml;
 }

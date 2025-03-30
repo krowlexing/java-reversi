@@ -10,9 +10,9 @@ import static fun.krowlexing.reversi.logger.Logger.print;
 
 public class Network {
 
-    private Socket socket;
-    private NetworkHandler input;
-    private SocketWriter writer;
+    private final Socket socket;
+    private final NetworkHandler input;
+    private final SocketWriter writer;
 
     private static Network instance;
 
@@ -79,5 +79,12 @@ public class Network {
 
     public Promise<GameCompletedMessage> onGameCompleted() {
         return input.onGameCompleted();
+    }
+
+    public Promise<StatsResponse> stats() throws IOException {
+        var req = new StatsRequest();
+        var promise = input.onStats();
+        writer.write(req);
+        return promise;
     }
 }

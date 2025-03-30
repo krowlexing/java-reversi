@@ -11,12 +11,12 @@ import static fun.krowlexing.reversi.logger.Logger.print;
 public class NetworkHandler extends Thread {
 
     private Socket socket;
-    private Promise<Rooms> roomsPromise;
     private Promise<RegisterResponse> registerPromise;
     private Promise<LoginResponse> loginPromise;
     private Promise<PrepareGameResponse> prepareGamePromise;
     private Promise<PairRevealResponse> pairRevealPromise;
     private Promise<GameCompletedMessage> gameCompletedPromise;
+    private Promise<StatsResponse> statsResponse;
 
     public NetworkHandler(Socket socket) {
         this.socket = socket;
@@ -42,6 +42,8 @@ public class NetworkHandler extends Thread {
                    handle(PairRevealResponse.class, reader, pairRevealPromise);
                } else if (ServerMessageType.GameCompleted == type) {
                    handle(GameCompletedMessage.class, reader, gameCompletedPromise);
+               } else if (ServerMessageType.StatsResponse == type) {
+                   handle(StatsResponse.class, reader, statsResponse);
                }
             }
         } catch (IOException e) {
@@ -88,5 +90,10 @@ public class NetworkHandler extends Thread {
     public Promise<GameCompletedMessage> onGameCompleted() {
         gameCompletedPromise = new Promise<>();
         return gameCompletedPromise;
+    }
+
+    public Promise<StatsResponse> onStats() {
+        statsResponse = new Promise<>();
+        return statsResponse;
     }
 }

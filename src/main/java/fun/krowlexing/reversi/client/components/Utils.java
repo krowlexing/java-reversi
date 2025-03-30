@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 import static fun.krowlexing.reversi.client.styles.Style.style;
@@ -14,6 +15,10 @@ public class Utils {
 
     public static Column.Builder column(Node ...args) {
         return new Column.Builder(args);
+    }
+
+    public static Column.Builder column(VBox parent) {
+        return new Column.Builder(parent);
     }
 
     public static ButtonBuilder button(String text) {

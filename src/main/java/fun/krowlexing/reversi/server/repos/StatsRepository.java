@@ -1,9 +1,12 @@
 package fun.krowlexing.reversi.server.repos;
 
 import fun.krowlexing.reversi.client.data.Size;
+import fun.krowlexing.reversi.messages.Stat;
 import fun.krowlexing.reversi.server.entities.Stats;
+import fun.krowlexing.reversi.server.exceptions.PersistenceException;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class StatsRepository implements AutoCloseable {
 
@@ -49,13 +52,14 @@ public class StatsRepository implements AutoCloseable {
         insertGameStats(playerId, size.width, size.height, timeUsed, maxTime, pairChecked);
     }
 
-    public Stats getPlayerStats(int playerId) throws SQLException {
-        var query = "SELECT * FROM game_stats WHERE player_id = ? ORDER BY played_at DESC LIMIT 1";
+    public Stats[] getPlayerStats(int playerId) throws PersistenceException {
+        var query = "SELECT * FROM game_stats WHERE player_id = ? ORDER BY played_at DESC LIMIT 10";
 
         try (var stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, playerId);
             try (var result = stmt.executeQuery()) {
-                if (result.next()) {
+                var stats = new ArrayList<>();
+                while (result.next()) {
                     int id = result.getInt("id");
                     int fieldWidth = result.getInt("field_width");
                     int fieldHeight = result.getInt("field_height");
@@ -64,14 +68,19 @@ public class StatsRepository implements AutoCloseable {
                     int pairsChecked = result.getInt("pairs_checked");
                     Timestamp playedAt = result.getTimestamp("played_at");
 
-                    return new Stats(id, playerId, fieldWidth, fieldHeight, timeUsed, maxTime, pairsChecked, playedAt);
+                    stats.add(new Stats(id, playerId, fieldWidth, fieldHeight, timeUsed, maxTime, pairsChecked, playedAt));
                 }
+
+                return stats.toArray(new Stats[0]);
             }
+        } catch (SQLException e) {
+            throw new PersistenceException("Cannot get player stats: " + e.getMessage());
         }
-        return null;
     }
+
 
     public void close() throws Exception {
         this.connection.close();
     }
+
 }

@@ -3,6 +3,7 @@ package fun.krowlexing.reversi.server;
 import fun.krowlexing.reversi.client.data.Size;
 import fun.krowlexing.reversi.logger.Logger;
 import fun.krowlexing.reversi.messages.*;
+import fun.krowlexing.reversi.server.entities.Stats;
 import fun.krowlexing.reversi.server.exceptions.PersistenceException;
 import fun.krowlexing.reversi.server.exceptions.UserExistsException;
 import fun.krowlexing.reversi.server.repos.StatsRepository;
@@ -15,7 +16,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 public class ClientThread extends Thread {
 
@@ -121,6 +124,7 @@ public class ClientThread extends Thread {
             state.prepareGame(request.width, request.height, request.seconds);
             writer.write(new PrepareGameResponse(true, ""));
         });
+        router.put(ClientMessageType.StatsRequest, () -> handleStats(writer, reader));
         router.put(ClientMessageType.LoginRequest, () -> handleLogin(writer, reader));
         router.put(ClientMessageType.PairRevealRequest, () -> handleRevealPair(writer, reader));
 
@@ -165,5 +169,27 @@ public class ClientThread extends Thread {
         } catch (UserExistsException ex) {
             writer.write(new RegisterResponse(false, "user with username '" + request.username + "' already exists"));
         }
+    }
+
+    private void handleStats(SocketWriter writer, SocketReader reader) throws IOException {
+        var request = StatsRequest.read(reader);
+        try {
+            var dbStats = stats.getPlayerStats(state.playerId());
+            var resultStats = Arrays.stream(dbStats).map(ClientThread::map).toArray(Stat[]::new);
+            writer.write(new StatsResponse(resultStats));
+        } catch (PersistenceException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static Stat map(Stats dbStats) {
+        return new Stat(
+            dbStats.getFieldWidth(),
+            dbStats.getFieldHeight(),
+dbStats.getTimeUsed(),
+            dbStats.getMaxTime(),
+            dbStats.getPairsChecked(),
+            dbStats.getFieldWidth() * dbStats.getFieldHeight() / 2
+        );
     }
 }
