@@ -37,7 +37,9 @@ public class Login extends Scene {
             column(
                 title("Login"),
                 column(
+                    label("Username:"),
                     usernameField,
+                    label("Password"),
                     passwordField
                 ).box(),
                 button("Login")
@@ -69,9 +71,13 @@ public class Login extends Scene {
 
         try {
             network.login(username, password)
-                .then(response -> {
-                    Platform.runLater(() -> Router.navigate(MainMenu::new));
-                });
+                .then(response -> Platform.runLater(()-> {
+                    if (response.success) {
+                        Router.navigate(MainMenu::new);
+                    } else {
+                        showAlert("Неправильное имя пользователя или пароль");
+                    }
+                }));
         } catch (Exception e) {
             showAlert("Network error: " + e.getMessage());
         }

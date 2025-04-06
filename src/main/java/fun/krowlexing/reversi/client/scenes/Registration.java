@@ -42,8 +42,11 @@ public class Registration extends Scene {
         var vbox = new Column.Builder(parent).nodes(
             title("Register"),
             column(
+                label("Username:"),
                 usernameField,
+                label("Password:"),
                 passwordField,
+                label("Confirm password:"),
                 confirmPasswordField
             ).box(),
             button("Register")
@@ -71,7 +74,6 @@ public class Registration extends Scene {
         Field passwordField,
         Field confirmPasswordField
     ) {
-        print("handle registration");
         usernameField.touch();
         passwordField.touch();
         confirmPasswordField.touch();
@@ -95,7 +97,13 @@ public class Registration extends Scene {
                 username,
                 password
             )
-            .then(response -> Platform.runLater(() -> onRegister(response)));
+            .then(response -> Platform.runLater(() -> {
+                if (response.success) {
+                     onRegister(response);
+                } else {
+                    showAlert("Такое имя пользователя уже занято");
+                }
+            }));
         } catch (Exception e) {
             showAlert("Network error: " + e.getMessage());
         }

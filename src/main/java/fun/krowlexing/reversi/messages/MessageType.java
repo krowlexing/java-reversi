@@ -10,7 +10,7 @@ public class MessageType {
         return messageType;
     }
 
-    static MessageType client(ClientMessageType type) {
+    public static MessageType client(ClientMessageType type) {
         var messageType = new MessageType();
         messageType.client = type;
         return messageType;

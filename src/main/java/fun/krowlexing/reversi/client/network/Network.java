@@ -54,6 +54,12 @@ public class Network {
     }
 
     public void close() throws InterruptedException, IOException {
+        try {
+            writer.write(MessageType.client(ClientMessageType.CloseMessage));
+        }catch (Exception e) {
+
+        }
+
         socket.close();
         input.interrupt();
         print("interrupted");

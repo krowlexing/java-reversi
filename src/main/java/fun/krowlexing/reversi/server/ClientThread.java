@@ -65,6 +65,9 @@ public class ClientThread extends Thread {
                 var type = ClientMessageType.read(in);
                 print("Client send message: " + type.name());
 
+                if (type == ClientMessageType.CloseMessage) {
+                    break;
+                }
 
                 var route = router.get(type);
                 if (route == null) {

@@ -27,6 +27,8 @@ public class Router {
 
     public static void navigate(Function<VBox, Scene> generateScene) {
         var vbox = new VBox();
+        vbox.setMinHeight(500);
+        vbox.setMinWidth(500);
         var scene = generateScene.apply(vbox);
         stage.setScene(scene);
     }
