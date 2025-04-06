@@ -23,6 +23,7 @@ public class ClientState {
     private final ColorService colorService;
 
     private int totalPairs = 0;
+    public Size fieldSize;
     public int pairsOpened = 0;
 
     public Runnable onTimeout;
@@ -45,7 +46,9 @@ public class ClientState {
     }
 
     public void prepareGame(int width, int height, int seconds) {
-        this.colorService.init(new Size(width, height));
+        var fieldSize = new Size(width, height);
+        this.fieldSize = fieldSize;
+        this.colorService.init(fieldSize);
         this.totalPairs = colorService.getCellCount(new Size(width, height)) / 2;
 
         timer = new GameTimer(seconds, onTimeout);

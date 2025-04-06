@@ -1,11 +1,14 @@
 package fun.krowlexing.reversi.client.components;
 
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
-public class Field extends VBox {
+import static fun.krowlexing.reversi.logger.Logger.print;
+
+public class NumericField extends VBox {
 
     TextField textField;
     ErrorLabel error;
@@ -14,15 +17,17 @@ public class Field extends VBox {
 
     boolean touched = false;
 
-    public Field() {
+    public NumericField() {
         textField = new TextField();
-        textField.setOnKeyTyped(this::onKeyTyped);
+        textField.setTextFormatter(new TextFormatter<String>(change -> {
+            String newText = change.getControlNewText();
+            return newText.matches("\\d*") ? change : null;
+        }));
+
+        textField.setOnKeyReleased(this::onKeyTyped);
         textField.setOnMouseClicked(this::onClicked);
         error = new ErrorLabel();
-        this.getChildren().addAll(
-            textField,
-            error
-        );
+        this.getChildren().addAll(textField, error);
     }
 
     void onKeyTyped(KeyEvent e) {
@@ -34,8 +39,6 @@ public class Field extends VBox {
         touched = true;
         validate();
     }
-
-
 
     public void validate() {
         var text = textField.getText();
@@ -58,15 +61,23 @@ public class Field extends VBox {
         return this.textField.getText();
     }
 
-    public Field validator(Validator validator) {
+    public NumericField validator(Validator validator) {
         this.validator = validator;
         return this;
     }
+
+    public boolean isValid() {
+        if (this.validator == null) return true;
+        this.validate();
+        return this.error.getText().equals("");
+
+    }
+
     public void setError(String errorText) {
         this.error.setText(errorText);
     }
 
-    public Field promptText(String promptText) {
+    public NumericField promptText(String promptText) {
         this.textField.setPromptText(promptText);
         return this;
     }
@@ -76,16 +87,12 @@ public class Field extends VBox {
     }
 
     public static class Builder {
-        public Builder() {
-
-        }
-
         public NumericField ok() {
             return new NumericField();
         }
     }
 
     public interface Validator {
-        public String validate(String text);
+        String validate(String text);
     }
 }

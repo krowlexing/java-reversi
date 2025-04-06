@@ -1,11 +1,10 @@
 package fun.krowlexing.reversi.client.scenes;
 
 import fun.krowlexing.reversi.client.Router;
-import fun.krowlexing.reversi.client.components.Field;
+import fun.krowlexing.reversi.client.components.NumericField;
 import fun.krowlexing.reversi.client.data.GameSettings;
 import fun.krowlexing.reversi.client.data.Size;
 import fun.krowlexing.reversi.client.network.Network;
-import fun.krowlexing.reversi.client.network.NetworkHandler;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -14,77 +13,111 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-import static fun.krowlexing.reversi.client.components.Utils.column;
+import static fun.krowlexing.reversi.client.components.Utils.*;
 
 public class NewGame extends Scene {
-    Field widthInput;
-    Field heightInput;
+    NumericField widthInput;
+    NumericField heightInput;
+    NumericField timeInput;
 
     public NewGame(VBox parent) {
         super(parent);
         parent.setPadding(new Insets(20));
         parent.setSpacing(30);
 
-        widthInput = new Field().promptText("Enter field's width");
-        heightInput = new Field().promptText("Enter field's height");
-        var button = new Button();
-        button.setText("Start game");
-        button.setOnMouseClicked((e) -> {
-            var size = validate();
-            try {
-                if (size != null) {
-                    Network.get().onGameCompleted().then(r -> Platform.runLater(() -> Router.navigate((b) -> r.success ? GameEnd.success(b) : GameEnd.fail(b)))
+        widthInput = new NumericField().promptText("Enter field's width");
+        heightInput = new NumericField().promptText("Enter field's height");
+        timeInput = new NumericField().promptText("Enter total time");
 
-                    );
-                    Network.get()
-                        .prepareGame(size.width, size.height, 20)
-                        .then(v -> Platform.runLater(() -> Router.navigate(p -> new Game(p, new GameSettings(size.width, size.height, 20)))));
-                }
-            } catch (IOException ex) {
 
-            }
-        });
         parent.getChildren().addAll(
             column(
-                widthInput,
-                heightInput
+                column(
+                    label("Field's width:"),
+                    widthInput
+                ).box(),
+                column(
+                    label("Field's height:"),
+                    heightInput
+                ).box(),
+                column(
+                    label("Available time:"),
+                    timeInput
+                ).box()
             ).gap(20).box(),
-            button
+            button("Start game")
+                .onClick((e) -> {
+                    var gameSettings = validate();
+                    if (gameSettings != null) {
+                        try {
+                            Network.get().onGameCompleted().then(r -> Platform.runLater(() ->
+                                Router.navigate((b) ->
+                                    r.success ?
+                                        GameEnd.success(b) :
+                                        GameEnd.fail(b)
+                                )));
+                            Network.get()
+                                .prepareGame(gameSettings.width, gameSettings.height, 20)
+                                .then(v -> Platform.runLater(() ->
+                                    Router.navigate(p -> new Game(p, gameSettings))));
+
+                        } catch (IOException ex) {
+
+                        }
+                    }
+                })
         );
     }
 
+    public static Integer validateInt(NumericField field, int start, int end, String error) {
+        var widthString = field.text();
+        var value = Integer.parseInt(widthString);
+        if(value < start || value > end) {
+            field.setError(error);
+            return null;
+        } else field.setError("");
 
+        return value;
+    }
 
-    private Size validate() {
+    private GameSettings validate() {
         var valid = true;
         var width = 0;
         var height = 0;
+        var time = 0;
         try {
-            var widthString = widthInput.text();
-            width = Integer.parseInt(widthString);
-            if(width < 3 || width > 10) {
+            var result = validateInt(widthInput, 3, 10, "Must be a number from 3 to 10");
+            if (result == null) {
                 valid = false;
-                widthInput.setError("Must be a number from 3 to 10");
-            }
+            } else width = result;
+
 
         } catch (NumberFormatException e) {
             valid = false;
             widthInput.setError("Must be valid number");
         }
         try {
-            var heightString = heightInput.text();
-            height = Integer.parseInt(heightString);
-            if(height < 3 || height > 10) {
+            var result = validateInt(heightInput, 3, 10, "Must be a number from 3 to 10");
+            if (result == null) {
                 valid = false;
-                heightInput.setError("Must be a number from 3 to 10");
-            }
+            } else height = result;
         } catch (NumberFormatException e) {
             valid = false;
             heightInput.setError("Must be valid number");
         }
 
+        try {
+            var result = validateInt(timeInput, 20, 120, "Must be between 20 and 120 seconds");
+            if (result == null) {
+                valid = false;
+            } else time = result;
+        } catch (NumberFormatException e) {
+            valid = false;
+            timeInput.setError("Must be valid number");
+        }
+
         if (valid) {
-            return new Size(width, height);
+            return new GameSettings(width, height, time);
         }
 
         return null;

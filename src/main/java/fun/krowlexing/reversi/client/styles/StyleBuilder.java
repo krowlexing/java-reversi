@@ -1,5 +1,6 @@
 package fun.krowlexing.reversi.client.styles;
 
+import javafx.geometry.Pos;
 import javafx.scene.paint.Paint;
 
 public class StyleBuilder {
@@ -61,10 +62,17 @@ public class StyleBuilder {
         return this;
     }
 
+    public StyleBuilder borderRadius(int borderRadius) {
+        style.borderRadius = borderRadius;
+        return this;
+    }
+
     public StyleBuilder borderColor(String borderColor) {
         style.borderColor = Paint.valueOf(borderColor);
         return this;
     }
+
+
 
     public StyleBuilder color(String color) {
         style.color = Paint.valueOf(color);
@@ -76,6 +84,11 @@ public class StyleBuilder {
         style.paddingBottom = padding;
         style.paddingLeft = padding;
         style.paddingRight = padding;
+        return this;
+    }
+
+    public StyleBuilder align(Pos pos) {
+        style.align = pos;
         return this;
     }
 

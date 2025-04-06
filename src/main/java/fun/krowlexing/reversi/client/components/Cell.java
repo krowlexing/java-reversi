@@ -14,6 +14,7 @@ public class Cell extends StackPane {
         .setWidth(40)
         .setHeight(40)
         .background("992233")
+        .borderRadius(10)
         .build();
     private final Style selectedStyle = base.extend().border(2).borderColor("#000000").build();
     private final Pane rect = base.apply(new Pane());

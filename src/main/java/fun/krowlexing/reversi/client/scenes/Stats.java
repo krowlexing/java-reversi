@@ -4,6 +4,7 @@ import fun.krowlexing.reversi.client.Router;
 import fun.krowlexing.reversi.client.network.Network;
 import fun.krowlexing.reversi.messages.Stat;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -21,6 +22,16 @@ public class Stats extends Scene {
 
         TableView<Stat> table = new TableView<>();
 
+        int maxVisibleRows = 10;
+        double rowHeight = 24; // default row height in JavaFX
+
+        table.setFixedCellSize(rowHeight);
+        table.prefHeightProperty().bind(
+            Bindings.createDoubleBinding(() -> {
+                int rows = Math.min(table.getItems().size(), maxVisibleRows);
+                return rows * rowHeight + 28; // 28 = estimated header height
+            }, table.getItems())
+        );
 
         var fieldWidthColumn = makeColumn("Field width", "fieldWidth");
         var fieldHeightColumn = makeColumn("Field height", "fieldHeight");
@@ -42,7 +53,7 @@ public class Stats extends Scene {
             table,
             button("Back").onClick(
                 e -> Router.navigate(MainMenu::new)
-            ).done());
+            ));
     }
 
     <T> TableColumn<Stat, T> makeColumn(String name, String property) {

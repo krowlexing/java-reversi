@@ -3,8 +3,8 @@ package fun.krowlexing.reversi.client.scenes;
 import fun.krowlexing.reversi.client.Router;
 import fun.krowlexing.reversi.client.components.Column;
 import fun.krowlexing.reversi.client.components.Field;
+import fun.krowlexing.reversi.client.components.NumericField;
 import fun.krowlexing.reversi.client.network.Network;
-import fun.krowlexing.reversi.client.styles.Style;
 import fun.krowlexing.reversi.messages.RegisterResponse;
 import javafx.application.Platform;
 import javafx.scene.Parent;
@@ -55,10 +55,9 @@ public class Registration extends Scene {
                     usernameField,
                     passwordField,
                     confirmPasswordField
-                )).done(),
+                )),
             button("I already have an account")
                 .onClick(e -> Router.navigate(b -> Login.create(b, network)))
-                .done()
         ).style(style().padding(20).gap(16)).box();
 
 

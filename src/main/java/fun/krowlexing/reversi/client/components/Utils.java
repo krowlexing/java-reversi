@@ -21,6 +21,10 @@ public class Utils {
         return new Column.Builder(parent);
     }
 
+    public static Row.Builder row(Node ...args) {
+        return new Row.Builder(args);
+    }
+
     public static ButtonBuilder button(String text) {
         return new ButtonBuilder().text(text);
     }
@@ -46,9 +50,13 @@ public class Utils {
             return this;
         }
 
-        public ButtonBuilder onClick(EventHandler<MouseEvent> handler) {
+        public ButtonBuilder onClickAnd(EventHandler<MouseEvent> handler) {
             button.setOnMouseClicked(handler);
             return this;
+        }
+
+        public Button onClick(EventHandler<MouseEvent> handler) {
+            return this.onClickAnd(handler).done();
         }
 
         public Button done() {

@@ -105,7 +105,7 @@ public class ClientThread extends Thread {
             state.onTimeout = () -> {
                 try {
                     var playerId = state.playerId();
-                    stats.insertSuccess(playerId, new Size(5, 5), 90, 90, 24);
+                    stats.insertSuccess(playerId, state.fieldSize, state.totalTime, state.totalTime, state.pairsOpened);
                     writer.write(new GameCompletedMessage(false, "timeout"));
                 } catch (IOException | SQLException e) {
                     throw new RuntimeException(e);
@@ -118,7 +118,7 @@ public class ClientThread extends Thread {
                     var playerId = state.playerId();
                     print(playerId + " is captured") ;
                     var timeUsed = s.totalTime - secondsLeft;
-                    stats.insertSuccess(playerId, new Size(5, 5), (int) timeUsed, s.totalTime, 24);
+                    stats.insertSuccess(playerId, s.fieldSize, (int) timeUsed, s.totalTime, s.pairsOpened);
                     writer.write(new GameCompletedMessage(true, "well done"));
                 } catch (IOException | SQLException e) {
                     throw new RuntimeException(e);

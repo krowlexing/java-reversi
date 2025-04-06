@@ -7,8 +7,12 @@ import fun.krowlexing.reversi.client.components.Timer;
 import fun.krowlexing.reversi.client.data.GameSettings;
 import fun.krowlexing.reversi.client.data.Size;
 import fun.krowlexing.reversi.server.services.ColorService;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
+
+import static fun.krowlexing.reversi.client.components.Utils.row;
+import static fun.krowlexing.reversi.client.styles.Style.style;
 
 public class Game extends Scene {
 
@@ -45,12 +49,14 @@ public class Game extends Scene {
             colors
         ).onMatch(this::onPairMatched);
 
+        var centered = style().align(Pos.CENTER);
+
         timer.setTime(settings.seconds);
         timer.start();
         timer.onTimeOut(this::onTimeOut);
         parent.getChildren().addAll(
-            timer,
-            board
+            row(timer).style(centered).box(),
+            row(board).style(centered).box()
         );
     }
 

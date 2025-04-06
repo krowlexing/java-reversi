@@ -1,6 +1,7 @@
 package fun.krowlexing.reversi.client.styles;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
@@ -25,9 +26,13 @@ public class Style implements Cloneable{
     public double borderLeft = 0.0;
     public double borderRight = 0.0;
 
+    public double borderRadius = 0.0;
+
     public Paint borderColor = Paint.valueOf("#ffffff");
 
     public double gap;
+
+    public Pos align;
 
 
     public double paddingTop;
@@ -47,9 +52,17 @@ public class Style implements Cloneable{
         return new StyleBuilder(this.clone());
     }
 
+    public CornerRadii cornerRadii() {
+        if (borderRadius != 0) {
+            return new CornerRadii(borderRadius);
+        }
+
+        return null;
+    }
+
     public Background background() {
         if (paint == null) return null;
-        var backgroundFill = new BackgroundFill(paint, null, null);
+        var backgroundFill = new BackgroundFill(paint, cornerRadii(), null);
         return new Background(backgroundFill);
     }
 
@@ -57,7 +70,10 @@ public class Style implements Cloneable{
         var borderWidth = new BorderWidths(borderTop, borderBottom, borderLeft, borderRight);
 
         var strokeStyle = BorderStrokeStyle.SOLID;
-        var stroke = new BorderStroke(borderColor, strokeStyle, null, borderWidth);
+
+        var radii = cornerRadii();
+
+        var stroke = new BorderStroke(borderColor, strokeStyle, radii, borderWidth);
         return new Border(stroke);
     }
 

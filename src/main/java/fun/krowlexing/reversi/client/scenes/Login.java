@@ -47,7 +47,7 @@ public class Login extends Scene {
                         network,
                         usernameField,
                         passwordField
-                    )).done()
+                    ))
             ).style(style().gap(16)).box()
         ).style(style().padding(20)).box();
 

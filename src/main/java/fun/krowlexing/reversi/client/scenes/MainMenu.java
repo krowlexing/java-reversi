@@ -28,7 +28,7 @@ public class MainMenu extends Scene {
 
         var prepareGameButton = new Button("Prepare game");
         var stats = button("Stats")
-            .onClick(e -> Router.navigate(Stats::new)).done();
+            .onClick(e -> Router.navigate(Stats::new));
         prepareGameButton.setOnMouseClicked(this::onPrepareGame);
 
         control.getChildren().addAll(
