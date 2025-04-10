@@ -23,13 +23,13 @@ public class Stats extends Scene {
         TableView<Stat> table = new TableView<>();
 
         int maxVisibleRows = 10;
-        double rowHeight = 24; // default row height in JavaFX
+        double rowHeight = 24;
 
         table.setFixedCellSize(rowHeight);
         table.prefHeightProperty().bind(
             Bindings.createDoubleBinding(() -> {
                 int rows = Math.min(table.getItems().size(), maxVisibleRows);
-                return rows * rowHeight + 28; // 28 = estimated header height
+                return rows * rowHeight + 28;
             }, table.getItems())
         );
 
