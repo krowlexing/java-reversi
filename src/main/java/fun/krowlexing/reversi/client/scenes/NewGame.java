@@ -1,12 +1,14 @@
 package fun.krowlexing.reversi.client.scenes;
 
 import fun.krowlexing.reversi.client.Router;
+import fun.krowlexing.reversi.client.Utils;
 import fun.krowlexing.reversi.client.components.NumericField;
 import fun.krowlexing.reversi.client.data.GameSettings;
 import fun.krowlexing.reversi.client.data.Size;
 import fun.krowlexing.reversi.client.network.Network;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -14,6 +16,7 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 
 import static fun.krowlexing.reversi.client.components.Utils.*;
+import static fun.krowlexing.reversi.client.styles.Style.style;
 
 public class NewGame extends Scene {
     NumericField widthInput;
@@ -22,6 +25,8 @@ public class NewGame extends Scene {
 
     public NewGame(VBox parent) {
         super(parent);
+        Utils.loadCss(this);
+        parent.setBackground(Utils.background());
         parent.setPadding(new Insets(20));
         parent.setSpacing(30);
 
@@ -30,22 +35,24 @@ public class NewGame extends Scene {
         timeInput = new NumericField().promptText("Enter total time");
 
 
+        parent.setAlignment(Pos.CENTER);
         parent.getChildren().addAll(
             column(
                 column(
-                    label("Field's width:"),
+                    label("Field's width:", "form-label"),
                     widthInput
                 ).box(),
                 column(
-                    label("Field's height:"),
+                    label("Field's height:", "form-label"),
                     heightInput
                 ).box(),
                 column(
-                    label("Available time:"),
+                    label("Available time:", "form-label"),
                     timeInput
                 ).box()
-            ).gap(20).box(),
+            ).gap(20).style(style().maxWidth(200)).box(),
             button("Start game")
+                .styleClass("round-button")
                 .onClick((e) -> {
                     var gameSettings = validate();
                     if (gameSettings != null) {

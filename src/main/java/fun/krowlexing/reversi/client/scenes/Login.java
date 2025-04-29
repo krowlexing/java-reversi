@@ -1,10 +1,12 @@
 package fun.krowlexing.reversi.client.scenes;
 
 import fun.krowlexing.reversi.client.Router;
+import fun.krowlexing.reversi.client.Utils;
 import fun.krowlexing.reversi.client.components.Column;
 import fun.krowlexing.reversi.client.components.Field;
 import fun.krowlexing.reversi.client.network.Network;
 import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -19,10 +21,12 @@ public class Login extends Scene {
 
     public Login(Parent parent, Network network) {
         super(parent);
+        Utils.loadCss(this);
         this.network = network;
     }
 
     public static Login create(VBox parent, Network network) {
+        parent.setBackground(Utils.background());
         var usernameField = new Field().validator(value -> {
             if (value.isEmpty()) return "This field is required";
             return null;
@@ -34,22 +38,21 @@ public class Login extends Scene {
         });
 
         var vbox = new Column.Builder(parent).nodes(
-            column(
-                title("Login"),
+                title("Login", "form-title"),
                 column(
-                    label("Username:"),
+                    label("Username:", "form-label"),
                     usernameField,
-                    label("Password"),
+                    label("Password", "form-label"),
                     passwordField
-                ).box(),
+                ).style(style().maxWidth(200)).box(),
                 button("Login")
+                    .styleClass("round-button")
                     .onClick(event -> handleLogin(
                         network,
                         usernameField,
                         passwordField
                     ))
-            ).style(style().gap(16)).box()
-        ).style(style().padding(20)).box();
+        ).style(style().gap(8).padding(20).align(Pos.CENTER)).box();
 
         return new Login(vbox, network);
     }

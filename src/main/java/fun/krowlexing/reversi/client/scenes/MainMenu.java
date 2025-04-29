@@ -2,6 +2,7 @@ package fun.krowlexing.reversi.client.scenes;
 
 
 import fun.krowlexing.reversi.client.Router;
+import fun.krowlexing.reversi.client.Utils;
 import fun.krowlexing.reversi.client.network.Network;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -14,25 +15,40 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 
 import static fun.krowlexing.reversi.client.components.Utils.button;
+import static fun.krowlexing.reversi.client.styles.Style.style;
 import static fun.krowlexing.reversi.logger.Logger.print;
 
 public class MainMenu extends Scene {
     Network network;
-    public MainMenu(VBox control){
-        super(control);
+    public MainMenu(VBox parent){
+        super(parent);
+        parent.setBackground(Utils.background());
 
-        control.setAlignment(Pos.TOP_CENTER);
-        control.setPadding(new Insets(20));
-        control.setSpacing(10);
+        parent.setAlignment(Pos.CENTER);
+        parent.setPadding(new Insets(20));
+        parent.setSpacing(10);
+        String css = getClass()
+            .getResource("/styles.css")
+            .toExternalForm();
+        this.getStylesheets().add(css);
 
+        var pgb = button("Prepare game").style(
+            style()
+                .padding(20)
+                .background("#ff0000")
+                .border(30)
+                .borderRadius(20)
+                .fontSize(40)
+                .borderColor("#0000ff")
+                .color("#00ff00")
+        ).styleClass("round-button").onClick(this::onPrepareGame);
 
-        var prepareGameButton = new Button("Prepare game");
         var stats = button("Stats")
+            .styleClass("outline-button")
             .onClick(e -> Router.navigate(Stats::new));
-        prepareGameButton.setOnMouseClicked(this::onPrepareGame);
 
-        control.getChildren().addAll(
-            prepareGameButton,
+        parent.getChildren().addAll(
+            pgb,
             stats
         );
     }

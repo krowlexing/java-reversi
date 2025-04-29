@@ -18,7 +18,10 @@ public class Field extends VBox {
         textField = new TextField();
         textField.setOnKeyTyped(this::onKeyTyped);
         textField.setOnMouseClicked(this::onClicked);
+        textField.getStyleClass().add("form-field");
         error = new ErrorLabel();
+
+        this.setMaxWidth(200);
         this.getChildren().addAll(
             textField,
             error

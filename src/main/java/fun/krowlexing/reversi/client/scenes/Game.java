@@ -1,6 +1,7 @@
 package fun.krowlexing.reversi.client.scenes;
 
 import fun.krowlexing.reversi.client.Router;
+import fun.krowlexing.reversi.client.Utils;
 import fun.krowlexing.reversi.client.components.Board;
 import fun.krowlexing.reversi.client.components.Skin;
 import fun.krowlexing.reversi.client.components.Timer;
@@ -35,6 +36,9 @@ public class Game extends Scene {
 
     public Game(VBox parent, GameSettings settings) {
         super(parent);
+        Utils.loadCss(this);
+        parent.setBackground(Utils.background());
+
         width = settings.width;
         height = settings.height;
         var skin = new Skin();
@@ -58,6 +62,7 @@ public class Game extends Scene {
             row(timer).style(centered).box(),
             row(board).style(centered).box()
         );
+        parent.setAlignment(Pos.CENTER);
     }
 
 

@@ -2,6 +2,7 @@ package fun.krowlexing.reversi.server.repos;
 
 import fun.krowlexing.reversi.client.data.Size;
 import fun.krowlexing.reversi.messages.Stat;
+import fun.krowlexing.reversi.server.entities.BestGame;
 import fun.krowlexing.reversi.server.entities.Stats;
 import fun.krowlexing.reversi.server.exceptions.PersistenceException;
 
@@ -72,6 +73,35 @@ public class StatsRepository implements AutoCloseable {
                 }
 
                 return stats.toArray(new Stats[0]);
+            }
+        } catch (SQLException e) {
+            throw new PersistenceException("Cannot get player stats: " + e.getMessage());
+        }
+    }
+
+    public BestGame[] getBestPlayerStats() throws PersistenceException {
+        var query = "SELECT *, CAST(time_used AS real) / (CAST(field_height AS real) * CAST(field_width  AS real)) as time FROM game_stats JOIN users ON player_id = users.id WHERE time_used < max_time ORDER BY  CAST(time_used AS real) /" +
+            "    (CAST(field_height AS real) * CAST(field_width  AS real)) ASC LIMIT 10";
+
+        try (var stmt = connection.prepareStatement(query)) {
+            try (var result = stmt.executeQuery()) {
+                var stats = new ArrayList<>();
+                while (result.next()) {
+                    int id = result.getInt("id");
+                    String username = result.getString("username");
+                    int fieldWidth = result.getInt("field_width");
+                    int fieldHeight = result.getInt("field_height");
+                    int timeUsed = result.getInt("time_used");
+                    int maxTime = result.getInt("max_time");
+                    double time = result.getDouble("time");
+                    int pairsChecked = result.getInt("pairs_checked");
+                    Timestamp playedAt = result.getTimestamp("played_at");
+
+                    System.out.println("Size : " + fieldWidth * fieldHeight + " Time: " + time);
+                    stats.add(new BestGame(id, username, fieldWidth, fieldHeight, timeUsed, maxTime, pairsChecked, playedAt));
+                }
+
+                return stats.toArray(new BestGame[0]);
             }
         } catch (SQLException e) {
             throw new PersistenceException("Cannot get player stats: " + e.getMessage());

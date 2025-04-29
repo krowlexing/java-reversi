@@ -24,6 +24,16 @@ public class Stat {
         return timeUsed;
     }
 
+    public int getCells() {
+        var size =  (fieldWidth * fieldHeight) ;
+
+        if (size % 2 == 0) {
+            return size;
+        } else {
+            return size - 1;
+        }
+    }
+
     public void setTimeUsed(int timeUsed) {
         this.timeUsed = timeUsed;
     }
@@ -40,6 +50,10 @@ public class Stat {
         return pairTried;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
     public void setPairTried(int pairTried) {
         this.pairTried = pairTried;
     }
@@ -52,6 +66,14 @@ public class Stat {
         this.totalPairs = totalPairs;
     }
 
+
+    public double getAverageTime() {
+        var avgTime = ((double) timeUsed) / (double) getCells();
+        return ((double) Math.round(  avgTime * 100)) / 100;
+    }
+
+    public String username;
+
     public int fieldWidth;
 
     public int fieldHeight;
@@ -62,7 +84,8 @@ public class Stat {
 
     public int totalPairs;
 
-    public Stat(int fieldWidth, int fieldHeight, int timeUsed, int totalTime, int pairTried, int totalPairs) {
+    public Stat(String username,int fieldWidth, int fieldHeight, int timeUsed, int totalTime, int pairTried, int totalPairs) {
+        this.username = username;
         this.fieldWidth = fieldWidth;
         this.fieldHeight = fieldHeight;
         this.timeUsed = timeUsed;
@@ -73,6 +96,7 @@ public class Stat {
 
     public static Stat read(SocketReader in) throws IOException {
         return new Stat(
+            in.readString(),
             in.readInt(),
             in.readInt(),
             in.readInt(),
@@ -83,6 +107,7 @@ public class Stat {
     }
 
     public void write(SocketWriter out) throws IOException {
+        out.writeString(username);
         out.write(fieldWidth);
         out.write(fieldHeight);
         out.write(timeUsed);

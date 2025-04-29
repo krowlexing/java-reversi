@@ -79,6 +79,11 @@ public class StyleBuilder {
         return this;
     }
 
+    public StyleBuilder fontSize(double size) {
+        style.fontSize = size;
+        return this;
+    }
+
     public StyleBuilder padding(double padding) {
         style.paddingTop = padding;
         style.paddingBottom = padding;

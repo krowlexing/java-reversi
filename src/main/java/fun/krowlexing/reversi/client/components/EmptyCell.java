@@ -10,7 +10,7 @@ public class EmptyCell extends Pane {
             .maxWidth(40)
             .height(40)
             .maxHeight(40)
-            .background("#ffffff")
+            .background("#ffffff00")
             .build();
         style.apply(this);
     }

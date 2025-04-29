@@ -19,10 +19,12 @@ public class NumericField extends VBox {
 
     public NumericField() {
         textField = new TextField();
+        textField.getStyleClass().add("form-field");
         textField.setTextFormatter(new TextFormatter<String>(change -> {
             String newText = change.getControlNewText();
             return newText.matches("\\d*") ? change : null;
         }));
+        this.setMaxWidth(200);
 
         textField.setOnKeyReleased(this::onKeyTyped);
         textField.setOnMouseClicked(this::onClicked);

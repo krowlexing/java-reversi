@@ -13,7 +13,10 @@ public class Cell extends StackPane {
     private final Style base = Style.create()
         .setWidth(40)
         .setHeight(40)
-        .background("992233")
+        .background("#FFFFFF99")
+        .borderColor("#00000022")
+        .border(1)
+        .padding(4)
         .borderRadius(10)
         .build();
     private final Style selectedStyle = base.extend().border(2).borderColor("#000000").build();

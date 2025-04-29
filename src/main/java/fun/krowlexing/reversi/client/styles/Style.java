@@ -3,6 +3,7 @@ package fun.krowlexing.reversi.client.styles;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
@@ -10,6 +11,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeType;
+import javafx.scene.text.Font;
 
 public class Style implements Cloneable{
     public Paint paint;
@@ -39,6 +41,8 @@ public class Style implements Cloneable{
     public double paddingBottom;
     public double paddingLeft;
     public double paddingRight;
+
+    public double fontSize;
 
     public static StyleBuilder create() {
         return new StyleBuilder();
@@ -81,6 +85,10 @@ public class Style implements Cloneable{
         return new Insets(paddingTop, paddingRight, paddingBottom, paddingLeft);
     }
 
+
+    public Button apply(Button button ) {
+        return ButtonStyler.apply(button, this);
+    }
     public Label apply(Label label) {
         return LabelStyler.apply(label, this);
     }
@@ -98,6 +106,8 @@ public class Style implements Cloneable{
         if (height != 0) {
             control.setMinHeight(height);
         }
+
+        if (border() != null) control.setBorder(border());
 
         return control;
     }
@@ -119,5 +129,10 @@ public class Style implements Cloneable{
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
+    }
+
+    public Font font() {
+        var font = new Font(fontSize);
+        return font;
     }
 }

@@ -1,0 +1,189 @@
+/* Primary, filled button */
+.round-button {
+    -fx-background-color:
+            linear-gradient(to bottom right,
+            #ff7f50 0%,
+            #ff4500 100%);
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+    -fx-border-color: #e63e00;
+    -fx-border-width: 2px;
+    -fx-padding: 10 20 10 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 4, 0, 0, 2);
+}
+
+.round-button:hover {
+    -fx-background-color:
+            linear-gradient(to bottom right,
+            #ff8f60 0%,
+            #ff5722 100%);
+}
+.round-button:pressed {
+    -fx-background-color:
+            linear-gradient(to bottom right,
+            #ff5722 0%,
+            #ff8f60 100%);
+    -fx-translate-y: 1px;
+}
+
+/* in src/main/resources/styles.css */
+
+/* … your existing .round-button … */
+
+/* make the stats button darker & more visible */
+.outline-button {
+    /* dark translucent fill */
+    -fx-background-color: rgba(208, 183, 183, 0.4);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+
+    /* rounded corners */
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+
+    /* soft white border for definition */
+    -fx-border-color: rgba(255, 255, 255, 0.8);
+    -fx-border-width: 2px;
+
+    /* padding */
+    -fx-padding: 4 8 4 8;
+
+    /* subtle lift */
+    -fx-effect: dropshadow(
+            gaussian,
+            rgba(0,0,0,0.5),
+            4,    /* radius */
+            0.0,  /* spread */
+            0,    /* offsetX */
+            2     /* offsetY */
+    );
+}
+
+.outline-button:hover {
+    /* lighten up on hover */
+    -fx-background-color: rgba(0, 0, 0, 0.6);
+}
+.outline-button:pressed {
+    /* darken on press */
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+    -fx-translate-y: 1px;
+}
+
+/* form “card” */
+.form-card {
+    -fx-background-color: rgba(255,255,255,0.85);
+    -fx-background-radius: 12;
+    -fx-padding: 24;
+    -fx-effect: dropshadow(
+            gaussian,
+            rgba(0,0,0,0.2),
+            8,   /* radius */
+            0.1, /* spread */
+            0,   /* offsetX */
+            4    /* offsetY */
+    );
+}
+
+/* Title */
+.form-title {
+    -fx-font-size: 24px;
+    -fx-text-fill: #333;
+    -fx-font-weight: bold;
+}
+
+/* Labels */
+.form-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #555;
+
+}
+
+/* TextFields / PasswordFields */
+.form-field {
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1px;
+    -fx-padding: 8 10 8 10;
+    -fx-font-size: 14px;
+    -fx-max-width: 200px;
+}
+
+/* Primary (Register) button */
+.primary-btn {
+    -fx-background-color:
+            linear-gradient(to bottom right,
+            #6a11cb 0%,
+            #2575fc 100%);
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-padding: 10 20 10 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 4,0,0,2);
+}
+.primary-btn:hover {
+    -fx-background-color:
+            linear-gradient(to bottom right,
+            #7b22dc 0%,
+            #3686f3 100%);
+}
+.primary-btn:pressed {
+    -fx-translate-y: 1px;
+}
+
+/* Link-style button */
+.link-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #2575fc;
+    -fx-underline: true;
+    -fx-font-size: 13px;
+    -fx-padding: 6 0 6 0;
+}
+.link-btn:hover {
+    -fx-text-fill: #3686f3;
+}
+.link-btn:pressed {
+    -fx-translate-y: 1px;
+}
+
+/* Container for the form: just some padding so it’s not flush to the window edge */
+.form-container {
+    -fx-padding: 80 60 40 60;
+}
+
+/* Labels: dark enough to read, small and tidy */
+.form-label {
+    -fx-text-fill: #2d2d2d;
+    -fx-font-size: 14px;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* TextFields & PasswordFields:
+   - lightly frosted look
+   - no heavy borders
+   - rounded corners
+*/
+.form-field {
+    -fx-background-color: rgba(255, 255, 255, 0.6);
+    -fx-background-insets: 0;
+    -fx-background-radius: 6;
+    -fx-border-color: transparent;
+    -fx-text-fill: #333;
+    -fx-prompt-text-fill: rgba(51, 51, 51, 0.6);
+    -fx-font-size: 14px;
+    -fx-padding: 8 12 8 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0.1, 0, 1);
+}
+
+/* Re-use your existing button styles! */
+.round-button { /* from before */ }
+.outline-button { /* from before */ }
+
+.transparent-table {
+    -fx-background-color: transparent;
+}

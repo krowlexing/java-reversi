@@ -3,6 +3,7 @@ package fun.krowlexing.reversi.server;
 import fun.krowlexing.reversi.client.data.Size;
 import fun.krowlexing.reversi.logger.Logger;
 import fun.krowlexing.reversi.messages.*;
+import fun.krowlexing.reversi.server.entities.BestGame;
 import fun.krowlexing.reversi.server.entities.Stats;
 import fun.krowlexing.reversi.server.exceptions.PersistenceException;
 import fun.krowlexing.reversi.server.exceptions.UserExistsException;
@@ -177,7 +178,7 @@ public class ClientThread extends Thread {
     private void handleStats(SocketWriter writer, SocketReader reader) throws IOException {
         var request = StatsRequest.read(reader);
         try {
-            var dbStats = stats.getPlayerStats(state.playerId());
+            var dbStats = stats.getBestPlayerStats();
             var resultStats = Arrays.stream(dbStats).map(ClientThread::map).toArray(Stat[]::new);
             writer.write(new StatsResponse(resultStats));
         } catch (PersistenceException e) {
@@ -185,8 +186,9 @@ public class ClientThread extends Thread {
         }
     }
 
-    private static Stat map(Stats dbStats) {
+    private static Stat map(BestGame dbStats) {
         return new Stat(
+            dbStats.getPlayer(),
             dbStats.getFieldWidth(),
             dbStats.getFieldHeight(),
 dbStats.getTimeUsed(),

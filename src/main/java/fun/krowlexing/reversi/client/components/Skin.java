@@ -4,10 +4,10 @@ import javafx.scene.paint.Paint;
 
 public class Skin {
 
-    public final static Paint red = Paint.valueOf("#DC143C");
-    public final static Paint green = Paint.valueOf("#228B22");
-    public final static Paint blue = Paint.valueOf("#4169E1");
-    public final static Paint yellow = Paint.valueOf("#B8860B");
+    public final static Paint red = Paint.valueOf("#FFAB91");
+    public final static Paint green = Paint.valueOf("#A5D6A7");
+    public final static Paint blue = Paint.valueOf("#81D4FA");
+    public final static Paint yellow = Paint.valueOf("#CE93D8");
 
     public final static Paint error = Paint.valueOf("#B22222");
 
